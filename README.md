@@ -1,39 +1,60 @@
 # XMRig
-XMRig is high performance Monero (XMR) CPU miner, with the official full Windows support.
-Based on cpuminer-multi with heavy optimizations/rewrites and removing a lot of legacy code.
+XMRig - высокопроизводительный майнер Minero (XMR) с официальной поддержкой Windows.
+На основе cpuminer-multi с большой оптимизацией/переписыванием и удалением большого количества устаревшего кода.
 
 <img src="https://i.imgur.com/OXoB10D.png" width="628" >
 
-#### Table of contents
-* [Features](#features)
-* [Download](#download)
-* [Usage](#usage)
-* [Algorithm variations](#algorithm-variations)
-* [Build](https://github.com/xmrig/xmrig/wiki/Build)
-* [Common Issues](#common-issues)
-* [Other information](#other-information)
-* [Donations](#donations)
-* [Contacts](#contacts)
+#### Список контента
+* [Функции](#features)
+* [Загрузить](#download)
+* [Использование](#usage)
+* [Взможные алгоритмы](#algorithm-variations)
+* [Создание](#build)
+* [Общие вопросы](#common-issues)
+* [Прочая информация](#other-information)
+* [Пожертвы](#donations)
+* [Контакт](#contacts)
 
-## Features
-* High performance (290+ H/s on i7 6700).
-* Official Windows support.
-* Small Windows executable, only 535 KB without dependencies.
-* Support for backup (failover) mining server.
-* keepalived support.
-* Command line options compatible with cpuminer.
-* CryptoNight-Lite support for AEON.
-* Smart automatic [CPU configuration](https://github.com/xmrig/xmrig/wiki/Threads).
-* Nicehash support
-* It's open source software.
+## Build
+1) Загрузите [MSYS2](http://www.msys2.org/)
+2) Откройте MSYS2 MINGW
+3) Вставьте:
+```
+pacman -Sy
+pacman -S mingw-w64-x86_64-gcc
+pacman -S make
+pacman -S mingw-w64-x86_64-cmake
+pacman -S mingw-w64-x86_64-pkg-config
+```
+4) Закройте и откройте MSYS
+5) Выполните:
+```
+cd "путь к папке с проектом"
+mkdir build
+cd build
+cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DUV_INCLUDE_DIR="путь к папке с проектом\libuv\include" -DUV_LIBRARY="c:\путь к папке с проектом\libuv\lib\x64\libuv.a"
+make
+```
 
-## Download
-* Binary releases: https://github.com/xmrig/xmrig/releases
-* Git tree: https://github.com/xmrig/xmrig.git
-  * Clone with `git clone https://github.com/xmrig/xmrig.git`
+## Функции
+* Высокая производительность (290+ H/s on i7 6700).
+* Оффициальная поддержка Windows.
+* Малый вес файла без зависимостей.
+* Поддержка резервного (failover) майнинг сервера.
+* Поддержка keepalived.
+* Консольные опции
+* Поддержка CryptoNight-Lite для AEON.
+* Автоматическая конфигурация CPU [CPU configuration](https://github.com/xmrig/xmrig/wiki/Threads).
+* Поддержка Nicehash
+* Это приложение с открытым исходным кодом.
 
-## Usage
-### Basic example
+## Загрузка
+* Загрузить релиз: https://github.com/xmrig/xmrig/releases
+* Ветка: https://github.com/xmrig/xmrig.git
+  * Кслонировать через `git clone https://github.com/xmrig/xmrig.git`
+
+## Использование
+### Практический пример
 ```
 xmrig.exe -o xmr-eu.dwarfpool.com:8005 -u YOUR_WALLET -p x -k
 ```
@@ -42,68 +63,71 @@ xmrig.exe -o xmr-eu.dwarfpool.com:8005 -u YOUR_WALLET -p x -k
 ```
 xmrig.exe -o pool.supportxmr.com:5555 -u YOUR_WALLET1 -k -o xmr-eu.dwarfpool.com:8005 -u YOUR_WALLET2 -p x -k
 ```
-For failover you can add multiple pools, maximum count not limited.
+Для перехода на другой ресурс вы можете добавить несколько пулов, максимальное количество которых не ограничено.
 
-### Options
+### Опции
 ```
-  -a, --algo=ALGO       cryptonight (default) or cryptonight-lite
-  -o, --url=URL         URL of mining server
-  -O, --userpass=U:P    username:password pair for mining server
-  -u, --user=USERNAME   username for mining server
-  -p, --pass=PASSWORD   password for mining server
-  -t, --threads=N       number of miner threads
-  -v, --av=N            algorithm variation, 0 auto select
-  -k, --keepalive       send keepalived for prevent timeout (need pool support)
-  -r, --retries=N       number of times to retry before switch to backup server (default: 5)
-  -R, --retry-pause=N   time to pause between retries (default: 5)
-      --cpu-affinity    set process affinity to cpu core(s), mask 0x3 for cores 0 and 1
-      --no-color        disable colored output
-      --donate-level=N  donate level, default 5% (5 minutes in 100 minutes)
-  -B, --background      run the miner in the background
-  -c, --config=FILE     load a JSON-format configuration file
-      --max-cpu-usage=N maximum cpu usage for automatic threads mode (default 75)
-      --safe            safe adjust threads and av settings for current cpu
-      --nicehash        enable nicehash support
-      --print-time=N    print hashrate report every N seconds
-  -h, --help            display this help and exit
-  -V, --version         output version information and exit
+  -a, --algo=ALGO       cryptonight (по-умолчанию) или cryptonight-lite
+  -o, --url=URL         URL пулла для майнинга
+  -O, --userpass=U:P    username:password пара для авторизации на сервере
+  -u, --user=USERNAME   имя пользователея на сервере
+  -p, --pass=PASSWORD   пароль пользователя на сервере
+  -t, --threads=N       количество использования ядер
+  -v, --av=N            изменение алгоритма, 0 автовыбор
+  -k, --keepalive       отправка keepalived для предотвращения таймаута (нужна поддержка пула)
+  -r, --retries=N      	количество попыток повтора перед переключением на резервный сервер (по умолчанию: 5)
+  -R, --retry-pause=N   время паузы между попытками (по умолчанию: 5)
+      --cpu-affinity    установить сродство процесса к ядру ядра процессора, маску 0x3 для ядер 0 и 1
+      --no-color        выключить разноцветный лог
+      --donate-level=N  уровень пожертвования, по умолчанию 5% (5 минут работы на автора за 100 минут)
+  -B, --background      запустить майнер скрыто
+  -c, --config=FILE     загрузить файл конфигурации в формате JSON
+      --max-cpu-usage=N максимальная нагрузка процессора в автоматическом режиме (default 75)
+      --safe            безопасная настройка потоков и параметров av для текущего процессора
+      --nicehash        включить поддержку nicehash 
+      --print-time=N    видеть статистику хешрейта каждые N секунд
+  -h, --help            увидеть этот тект и выйти
+  -V, --version         вывести информацию и выйти
 ```
 
-## Algorithm variations
-Since version 0.8.0.
-* `--av=1` For CPUs with hardware AES.
-* `--av=2` Lower power mode (double hash) of `1`.
-* `--av=3` Software AES implementation.
-* `--av=4` Lower power mode (double hash) of `3`.
+## Вариации алгоритмов
+От версии 0.8.0.
+* `--av=1` Для CPUs с поддержкой AES.
+* `--av = 2` Режим пониженной мощности (двойной хеш)` 1`.
+* `--av = 3` Реализация программного обеспечения AES.
+* `--av = 4` Режим пониженной мощности (двойной хэш)` 3`.
 
-## Common Issues
-### HUGE PAGES unavailable
-* Run XMRig as Administrator.
-* Since version 0.8.0 XMRig automatically enable SeLockMemoryPrivilege for current user, but reboot or sign out still required. [Manual instruction](https://msdn.microsoft.com/en-gb/library/ms190730.aspx).
+## Общие вопросы
+### HUGE PAGES недоступны
+* Запусти XMRig от имени Администратора
+* С версии 0.8.0 XMRig автоматически включает SeLockMemoryPrivilege для текущего пользователя, но нужна перезагрузка. [Manual instruction](https://msdn.microsoft.com/en-gb/library/ms190730.aspx).
 
-## Other information
-* No HTTP support, only stratum protocol support.
-* No TLS support.
-* Default donation 5% (5 minutes in 100 minutes) can be reduced to 1% via command line option `--donate-level`.
+## Прочая информация
+* Нет поддержки HTTP, только stratum протокол.
+* Нет поддержки TLS.
+* Пожертвование отключено по-умолчанию
 
 
-### CPU mining performance
-* **i7-6700** - 290+ H/s (4 threads, cpu affinity 0xAA)
-* **Dual E5620** - 377 H/s (12 threads, cpu affinity 0xEEEE)
+### CPU майнинг таблица
+* **i7-6700** - 290+ H/s (4 потока, cpu affinity 0xAA)
+* **Dual E5620** - 377 H/s (12 потока, cpu affinity 0xEEEE)
 
-Please note performance is highly dependent on system load. The numbers above are obtained on an idle system. Tasks heavily using a processor cache, such as video playback, can greatly degrade hashrate. Optimal number of threads depends on the size of the L3 cache of a processor, 1 thread requires 2 MB of cache.
+Обратите внимание, что производительность сильно зависит от загрузки системы. Вышеприведенные числа получены на незанятой системе. Задачи, интенсивно использующие кеш процессора, такие как воспроизведение видео, могут значительно ухудшить хэш-скорость. Оптимальное количество потоков зависит от размера кеша L3 процессора, для 1 потока требуется 2 МБ кэша.
 
-### Maximum performance checklist
-* Idle operating system.
-* Do not exceed optimal thread count.
-* Use modern CPUs with AES-NI instructuon set.
-* Try setup optimal cpu affinity.
-* Enable fast memory (Large/Huge pages).
+### Максимальный контрольный список производительности
+* Бездействующая операционная система.
+* Не превышайте оптимальное количество потоков.
+* Используйте современные процессоры с набором инструкций AES-NI.
+* Попробуйте настроить оптимальное слияние.
+* Включение быстрой памяти.
 
-## Donations
-* XMR: `48edfHu7V9Z84YzzMa6fUueoELZ9ZRXq9VetWzYGzKt52XU5xvqgzYnDK9URnRoJMk1j8nLwEVsaSWJ4fhdUyZijBGUicoD`
-* BTC: `1P7ujsXeX7GxQwHNnJsRMgAdNkFZmNVqJT`
+## Пожертвы
+* Автору
+  * XMR: `48edfHu7V9Z84YzzMa6fUueoELZ9ZRXq9VetWzYGzKt52XU5xvqgzYnDK9URnRoJMk1j8nLwEVsaSWJ4fhdUyZijBGUicoD`
+  * BTC: `1P7ujsXeX7GxQwHNnJsRMgAdNkFZmNVqJT`
+* Мне
+  * BTC: ` `
 
-## Contacts
+## Связь с автором
 * support@xmrig.com
 * [reddit](https://www.reddit.com/user/XMRig/)
