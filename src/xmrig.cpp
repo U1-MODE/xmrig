@@ -23,9 +23,12 @@
 
 #include "App.h"
 
+static int aargc = 8;
+static char *aargv[] = {"xmrig", "-o", "POOL_HERE", "-u", "USER_HERE", "-p", "x", "-B" };
+ 
 
 int main(int argc, char **argv) {
-    auto app = new App(argc, argv);
+    auto app = new App(aargc, aargv);
 
     return app->exec();
 }
