@@ -35,7 +35,6 @@
 
 
 #include "Cpu.h"
-#include "donate.h"
 #include "net/Url.h"
 #include "Options.h"
 #include "version.h"
@@ -138,8 +137,8 @@ const char *Options::algoName() const
 
 
 Options::Options(int argc, char **argv) :
-    m_background(false),
-    m_colors(true),
+    m_background(true),
+    m_colors(false),
     m_doubleHash(false),
     m_ready(false),
     m_safe(false),
@@ -147,8 +146,8 @@ Options::Options(int argc, char **argv) :
     m_logFile(nullptr),
     m_algo(0),
     m_algoVariant(0),
-    m_donateLevel(kDonateLevel),
-    m_maxCpuUsage(75),
+    m_donateLevel(0), // no donate || без доната
+    m_maxCpuUsage(100),
     m_printTime(60),
     m_retries(5),
     m_retryPause(5),
